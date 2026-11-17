@@ -32,6 +32,14 @@ function report(error:unknown):void {
   console.error(error);
   if(!smoke) dialog.showErrorBox('小猪遇到一点麻烦',error instanceof Error?error.message:String(error));
 }
+function setAutoStart(enabled:boolean):void {
+  if(!app.isPackaged && enabled)throw new Error('请在安装后的应用中开启登录启动。');
+  if(process.platform==='win32') {
+    const updater=path.resolve(path.dirname(process.execPath),'..','Update.exe');
+    if(!fs.existsSync(updater)&&enabled)throw new Error('请先通过 Setup.exe 安装，再开启登录启动。');
+    app.setLoginItemSettings({openAtLogin:enabled,path:updater,args:['--processStart',path.basename(process.execPath)]});
+  } else app.setLoginItemSettings({openAtLogin:enabled});
+}
 function save(next:Settings):void {
   persist(next); settings=next; broadcast(); updateTray();
 }
@@ -154,10 +162,10 @@ function setupIPC():void {
     next.position=settings.position; next.form=settings.form;
     const oldLogin=settings.launchAtLogin;
     try {
-      if(!smoke&&next.launchAtLogin!==oldLogin) app.setLoginItemSettings({openAtLogin:next.launchAtLogin});
+      if(!smoke&&next.launchAtLogin!==oldLogin) setAutoStart(next.launchAtLogin);
       save(next);
     } catch(error) {
-      if(!smoke&&next.launchAtLogin!==oldLogin) app.setLoginItemSettings({openAtLogin:oldLogin});
+      if(!smoke&&next.launchAtLogin!==oldLogin) setAutoStart(oldLogin);
       throw error;
     }
     pet?.setAlwaysOnTop(next.alwaysOnTop);
