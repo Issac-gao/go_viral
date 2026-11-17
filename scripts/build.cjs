@@ -1,0 +1,15 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const {execFileSync}=require('node:child_process');
+const root=path.resolve(__dirname,'..');
+process.chdir(root);
+fs.rmSync('dist',{recursive:true,force:true});
+fs.mkdirSync('build',{recursive:true});
+const tsc=require.resolve('typescript/bin/tsc');
+execFileSync(process.execPath,[tsc,'-p','tsconfig.json'],{stdio:'inherit'});
+execFileSync(process.execPath,[tsc,'-p','tsconfig.ui.json'],{stdio:'inherit'});
+fs.mkdirSync('dist/ui',{recursive:true});
+for(const name of fs.readdirSync('src/ui'))if(/\.(html|css)$/.test(name))fs.copyFileSync(path.join('src/ui',name),path.join('dist/ui',name));
+for(const name of fs.readdirSync('build/ui-ts/ui'))if(name.endsWith('.js'))fs.copyFileSync(path.join('build/ui-ts/ui',name),path.join('dist/ui',name));
+require('./icons.cjs');
+console.log('PainPig runtime built.');
