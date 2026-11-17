@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+<title>小猪替你顶一会儿</title><link rel="stylesheet" href="pet.css"></head>
+<body data-form="worker">
+  <div id="bubble" class="bubble" role="status" aria-live="polite" hidden>
+    <button id="message" data-hit type="button" title="点一下，让小猪接着演"></button>
+  </div>
+  <div id="pig" class="pig" aria-label="桌面小猪。单击戳一戳，拖动移动，右键打开菜单。">
+  <svg class="pig-art" viewBox="0 0 280 240" aria-hidden="true">
+    <ellipse class="shadow" cx="142" cy="215" rx="76" ry="10" fill="#674339" opacity=".13"/>
+    <g class="pig-body" data-hit>
+      <g class="worker-only">
+        <rect x="193" y="116" width="32" height="65" rx="12" fill="#9a7359" stroke="#674339" stroke-width="3"/>
+        <path d="M204 116v-9q0-12 11-7v17" fill="none" stroke="#674339" stroke-width="4"/>
+      </g>
+      <path class="tail" d="M211 164q28 4 20-12q-8-11-15 1" fill="none" stroke="#c98183" stroke-width="5" stroke-linecap="round"/>
+      <ellipse cx="100" cy="200" rx="21" ry="12" fill="#d9979b" stroke="#674339" stroke-width="3"/>
+      <ellipse cx="181" cy="200" rx="21" ry="12" fill="#d9979b" stroke="#674339" stroke-width="3"/>
+      <g class="ear ear-left"><path d="M79 101Q53 47 81 57Q106 65 109 91" fill="#f0a7ac" stroke="#674339" stroke-width="3.5" stroke-linejoin="round"/><path d="M80 84l-8-17 18 12" fill="#d88691"/></g>
+      <g class="ear ear-right"><path d="M175 89Q193 49 209 60Q222 72 201 108" fill="#f0a7ac" stroke="#674339" stroke-width="3.5" stroke-linejoin="round"/><path d="M194 83l12-14-5 24" fill="#d88691"/></g>
+      <path class="torso" d="M56 148C53 104 82 79 136 79C191 77 219 110 218 151C216 190 193 207 139 209C86 209 59 189 56 148Z" fill="#f6bcc0" stroke="#674339" stroke-width="3.5"/>
+      <path d="M71 137q-5-33 25-41" fill="none" stroke="#ffe0da" stroke-width="7" stroke-linecap="round" opacity=".85"/>
+      <ellipse cx="84" cy="151" rx="16" ry="8" fill="#e8929c" opacity=".6"/>
+      <ellipse cx="190" cy="151" rx="16" ry="8" fill="#e8929c" opacity=".6"/>
+      <g class="eyes">
+        <path d="M96 124l16 3M163 127l16-3" stroke="#674339" stroke-width="3" stroke-linecap="round"/>
+        <ellipse cx="106" cy="134" rx="3" ry="4" fill="#674339"/><ellipse cx="169" cy="134" rx="3" ry="4" fill="#674339"/>
+      </g>
+      <g class="sleep-eyes"><path d="M94 132q10 8 21 0M161 132q10 8 21 0" fill="none" stroke="#674339" stroke-width="3" stroke-linecap="round"/></g>
+      <ellipse class="snout" cx="138" cy="156" rx="27" ry="19" fill="#eba0aa" stroke="#674339" stroke-width="3"/>
+      <ellipse cx="129" cy="156" rx="3" ry="5" fill="#9d5f68"/><ellipse cx="148" cy="156" rx="3" ry="5" fill="#9d5f68"/>
+      <path class="mouth" d="M129 184q9-3 18 0" fill="none" stroke="#674339" stroke-width="2.5" stroke-linecap="round"/>
+      <g class="worker-only">
+        <path d="M114 190l24 11 23-12" fill="none" stroke="#927866" stroke-width="3"/>
+        <rect x="126" y="198" width="25" height="23" rx="4" fill="#fff3d8" stroke="#927866" stroke-width="2"/>
+        <path d="M133 206h12m-12 5h8" stroke="#b99874" stroke-width="2"/>
+      </g>
+      <g class="rest-only">
+        <path d="M66 172q73-20 145 5l-8 31q-71 18-133-2z" fill="#b5c5ae" stroke="#674339" stroke-width="3"/>
+        <path d="M81 183q63-12 114 3" fill="none" stroke="#e3e8d7" stroke-width="3"/>
+      </g>
+      <g class="offwork-only">
+        <path d="M91 122h29v17q-17 12-27-1zm64 0h29l-2 16q-14 11-25 0z" fill="#514744" stroke="#674339" stroke-width="3"/>
+        <path d="M120 126q17-8 35 0" fill="none" stroke="#674339" stroke-width="3"/>
+        <path d="M97 126l9 9m54-9 9 9" stroke="#eee5da" stroke-width="3"/>
+      </g>
+      <g class="puffer-only"><path d="M53 135l-9-7m15 35-12 2m174-30 10-7m-7 35 12 2" stroke="#c78176" stroke-width="3" stroke-linecap="round"/></g>
+    </g>
+    <g class="keyboard" data-hit><path d="M69 207h142l10 19H59z" fill="#eee8df" stroke="#927866" stroke-width="2"/><path d="M79 214h119m-126 6h132" stroke="#c5b7a7" stroke-width="2"/></g>
+    <g class="cup" data-hit><path d="M204 164h28v37h-28z" fill="#fff3d8" stroke="#674339" stroke-width="3"/><path d="M233 171q20 0 10 17h-10" fill="none" stroke="#674339" stroke-width="3"/></g>
+    <g class="sleep-z" fill="#927866" font-family="sans-serif" font-weight="bold"><text x="214" y="90" font-size="17">z</text><text x="231" y="69" font-size="22">z</text></g>
+  </svg>
+  </div>
+  <div id="quick" class="quick">
+    <button id="menu" data-hit type="button" title="变身和职场小剧场" aria-label="变身和职场小剧场">···</button>
+    <button id="hide" data-hit type="button" title="隐身一下，从托盘可以叫回来" aria-label="隐身一下">☾</button>
+    <button id="settings" data-hit type="button" title="设置与轻提醒" aria-label="设置与轻提醒">⚙</button>
+  </div>
+  <script type="module" src="pet.js"></script>
+</body></html>

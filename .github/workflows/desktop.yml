@@ -1,0 +1,74 @@
+name: Desktop installers
+on:
+  push:
+    branches: [main, feat/pain-pig-desktop]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: desktop-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install pinned top-level dependencies
+        run: npm install --no-audit --no-fund
+      - name: Compile and test reminder behavior
+        run: npm test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dependency-lock
+          path: package-lock.json
+  installers:
+    needs: tests
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            arch: x64
+            artifact: PainPig-Windows-x64
+          - os: macos-26
+            arch: arm64
+            artifact: PainPig-Mac-AppleSilicon
+          - os: macos-15-intel
+            arch: x64
+            artifact: PainPig-Mac-Intel
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@v4
+        with:
+          name: dependency-lock
+      - name: Install the exact tested dependency graph
+        run: npm ci --no-audit --no-fund
+      - name: Compile and run behavior tests
+        run: npm test
+      - name: Check native architecture
+        run: node -e "if(process.arch!=='${{ matrix.arch }}')throw Error('Runner architecture mismatch')"
+      - name: Start actual desktop renderer and preload
+        run: npm run smoke
+        timeout-minutes: 2
+      - name: Build installers
+        run: npm run make -- --arch=${{ matrix.arch }}
+      - name: Smoke test the packaged executable
+        run: node scripts/smoke-package.cjs ${{ matrix.arch }}
+        timeout-minutes: 2
+      - name: Prepare friend test bundle and checksums
+        run: node scripts/bundle.cjs ${{ matrix.artifact }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: build/delivery/
+          retention-days: 30
+          if-no-files-found: error

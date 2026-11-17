@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+<title>小猪的安排</title><link rel="stylesheet" href="settings.css"></head><body>
+<main>
+  <header><span class="eyebrow">情绪代班处 · 桌面分处</span><h1>你歇会儿，<br>我先顶着。</h1><p>小猪不考核你的心情，也不催你振作。</p></header>
+  <section aria-labelledby="forms-title"><h2 id="forms-title">今天，派哪只猪？</h2>
+    <div class="forms">
+      <button type="button" data-form="worker"><span>▤</span><strong>牛马猪</strong><small>替你忙碌八秒</small></button>
+      <button type="button" data-form="puffer"><span>◌</span><strong>气鼓猪</strong><small>这口气我来出</small></button>
+      <button type="button" data-form="rest"><span>☁</span><strong>躺平猪</strong><small>陪你缓两分钟</small></button>
+      <button type="button" data-form="offwork"><span>☀</span><strong>下班猪</strong><small>今天先到这里</small></button>
+    </div>
+  </section>
+  <form id="settings">
+    <section aria-labelledby="reminders-title"><h2 id="reminders-title">有需要，再提醒</h2><p class="hint">只在小猪身边举一下牌。你可以不理它。</p>
+      <div class="reminder-row"><label class="toggle"><input id="water-enabled" type="checkbox"><span>喝口水</span></label><label class="value">每 <input id="water-minutes" type="number" min="5" max="240" step="1" value="60" required aria-label="喝水间隔分钟"> 分钟</label></div>
+      <div class="reminder-row"><label class="toggle"><input id="rest-enabled" type="checkbox"><span>伸个懒腰</span></label><label class="value">每 <input id="rest-minutes" type="number" min="5" max="240" step="1" value="90" required aria-label="休息间隔分钟"> 分钟</label></div>
+      <div class="reminder-row"><label class="toggle"><input id="offwork-enabled" type="checkbox"><span>该下班了</span></label><input id="offwork-at" type="time" value="18:00" required aria-label="下班提醒时间"></div>
+      <div class="hours"><label>喝水和休息提醒时段 <input id="start" type="time" value="09:00" required aria-label="提醒开始时间"></label><span>至</span><input id="end" type="time" value="18:00" required aria-label="提醒结束时间"></div>
+      <fieldset class="days"><legend>提醒日</legend>
+        <label><input type="checkbox" name="day" value="1">一</label><label><input type="checkbox" name="day" value="2">二</label><label><input type="checkbox" name="day" value="3">三</label><label><input type="checkbox" name="day" value="4">四</label><label><input type="checkbox" name="day" value="5">五</label><label><input type="checkbox" name="day" value="6">六</label><label><input type="checkbox" name="day" value="0">日</label>
+      </fieldset>
+      <p class="hint">按电脑本地时间执行。锁屏、休眠或隐身时暂停，回来后不补弹。</p>
+    </section>
+    <section class="extras"><h2>怎么陪你，由你定</h2>
+      <label class="toggle"><input id="always-on-top" type="checkbox"><span>待在普通窗口上面</span></label>
+      <label class="toggle"><input id="launch-at-login" type="checkbox"><span>登录电脑时，叫小猪一起上班</span></label>
+      <p class="hint">全程静音。设置只留在这台电脑上。</p>
+    </section>
+    <p id="status" role="status" aria-live="polite"></p>
+    <footer><button id="close" type="button" class="secondary">先这样，回去陪我</button><button id="save" type="submit" class="primary">保存安排</button></footer>
+  </form>
+  <p class="fineprint">PainPig 0.1.0 · 熟人试用版<br>拖动小猪可以换位置，右键打开菜单。隐藏后从系统托盘／Mac 菜单栏叫回来。</p>
+</main><script type="module" src="settings.js"></script></body></html>

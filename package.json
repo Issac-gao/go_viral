@@ -1,0 +1,37 @@
+{
+  "name": "pain-pig-desktop",
+  "productName": "PainPig",
+  "version": "0.1.0",
+  "description": "小猪替你顶一会儿 · 桌面情绪代班处",
+  "author": {
+    "name": "Issac-gao"
+  },
+  "private": true,
+  "main": "dist/main.js",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "start": "npm run build && electron .",
+    "test": "npm run build && node --test tests/*.test.cjs",
+    "smoke": "electron . --smoke-test",
+    "package": "npm run build && electron-forge package",
+    "make": "npm run build && electron-forge make"
+  },
+  "config": {
+    "forge": "./forge.config.cjs"
+  },
+  "devDependencies": {
+    "electron": "45.3.3",
+    "@electron-forge/cli": "8.0.1",
+    "@electron-forge/maker-squirrel": "8.0.1",
+    "@electron-forge/maker-dmg": "8.0.1",
+    "@electron-forge/maker-zip": "8.0.1",
+    "typescript": "5.9.3",
+    "@types/node": "^22.10.0"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "1.0.1"
+  }
+}

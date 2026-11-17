@@ -1,0 +1,42 @@
+:root{font-family:"Microsoft YaHei","PingFang SC",sans-serif;color:#674339;color-scheme:light}
+*{box-sizing:border-box}html,body{margin:0;width:280px;height:320px;overflow:hidden;background:transparent;user-select:none}
+button{font:inherit;color:inherit;cursor:pointer}
+.pig{position:absolute;left:0;bottom:17px;width:280px;height:240px;pointer-events:none}
+.pig-art{width:100%;height:100%;pointer-events:none;overflow:visible}
+.pig-art *{pointer-events:visiblePainted}
+.pig-body{transform-origin:140px 205px;animation:breathe 4.8s ease-in-out infinite}
+.eyes{transform-origin:140px 130px;animation:blink 7s infinite}
+.ear{transform-origin:90px 96px}.ear-right{transform-origin:195px 98px}
+.bubble{position:absolute;left:12px;top:8px;width:256px;z-index:3}
+.bubble button{width:100%;min-height:56px;border:1px solid #d9c5b4;border-radius:17px;background:#fffaf0;padding:10px 13px;font-size:13px;line-height:1.7;box-shadow:0 3px 8px #67433912}
+.bubble button:disabled{cursor:default;opacity:1}
+.bubble:after{content:"";position:absolute;left:135px;bottom:-6px;width:11px;height:11px;border-right:1px solid #d9c5b4;border-bottom:1px solid #d9c5b4;background:#fffaf0;transform:rotate(45deg);pointer-events:none}
+.quick{position:absolute;bottom:1px;left:83px;display:flex;gap:6px;opacity:0;pointer-events:none;transition:opacity .15s}
+body.near .quick{opacity:1;pointer-events:auto}
+.quick button{border:1px solid #ddcfc2;background:#fffaf0;border-radius:50%;height:30px;width:30px;font-size:17px;line-height:20px;box-shadow:0 2px 5px #67433912}
+.quick button:hover{background:#f7e5d5}button:focus-visible{outline:2px solid #a86e54;outline-offset:2px}
+.worker-only,.puffer-only,.rest-only,.offwork-only,.keyboard,.cup,.sleep-z,.sleep-eyes{display:none}
+body[data-form=worker] .worker-only,body[data-form=puffer] .puffer-only,body[data-form=rest] .rest-only,body[data-form=offwork] .offwork-only{display:inline}
+body[data-form=rest] .eyes{display:none}body[data-form=rest] .sleep-eyes,body[data-form=rest] .sleep-z{display:inline}
+body[data-form=rest] .pig-body{transform:translateY(10px) scaleY(.87)}
+body[data-form=puffer] .pig-body{animation:puff-idle 4s ease-in-out infinite}
+body[data-form=offwork] .eyes{display:none}
+body[data-action=work] .keyboard{display:inline}
+body[data-action=work] .pig-body{animation:working 8s ease-in-out both}
+body[data-action=vent] .pig-body{animation:venting 6.5s ease-in-out both}
+body[data-action=offwork] .pig-body{animation:leaving 7s ease-in-out both}
+body[data-action=poke] .pig-body{animation:poke 1.6s ease both}
+body[data-action=water] .cup{display:inline}
+body[data-action=water] .pig-body{animation:drink 1s ease-in-out 5}
+body[data-action=stretch] .pig-body{animation:stretch 5s ease-in-out both}
+body.paused *,body.reduced *{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){.pig-body,.eyes{animation:none!important}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.015,.98)}}
+@keyframes blink{0%,44%,47%,100%{transform:scaleY(1)}45%,46%{transform:scaleY(.12)}}
+@keyframes puff-idle{0%,100%{transform:scale(1.07,1.08)}50%{transform:scale(1.1,1.1)}}
+@keyframes working{0%,20%,35%,50%{transform:translateY(0) rotate(-2deg)}27%,42%,57%{transform:translateY(3px) rotate(2deg)}70%,100%{transform:translateY(22px) scaleY(.7)}}
+@keyframes venting{0%{transform:scale(1)}35%,60%{transform:scale(1.17,1.2)}85%,100%{transform:scale(1,.95)}}
+@keyframes leaving{0%,30%{transform:rotate(0)}45%,65%{transform:rotate(-7deg) translateY(-4px)}55%,75%{transform:rotate(7deg)}100%{transform:rotate(0)}}
+@keyframes poke{0%,100%{transform:scale(1)}20%{transform:scale(1.09,.85)}50%{transform:scale(.95,1.06)}}
+@keyframes drink{0%,100%{transform:rotate(0)}50%{transform:rotate(5deg)}}
+@keyframes stretch{0%,100%{transform:scale(1)}40%,65%{transform:scale(.9,1.14)}}
