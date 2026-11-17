@@ -9,7 +9,7 @@ cp "$exe" build/mac-native/PainPig-x86_64
 swiftc -O -whole-module-optimization -target arm64-apple-macos13.0 macos/PainPig.swift -o build/mac-native/PainPig-arm64 -framework Cocoa -framework WebKit -framework ServiceManagement
 strip -x build/mac-native/PainPig-arm64
 lipo -create build/mac-native/PainPig-x86_64 build/mac-native/PainPig-arm64 -output "$exe"
-lipo -verify_arch x86_64 arm64 "$exe"
+lipo "$exe" -verify_arch x86_64 arm64
 codesign --force --sign - --timestamp=none "$app"
 codesign --verify --deep --strict --all-architectures --verbose=2 "$app"
 "$exe" --self-test
