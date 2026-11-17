@@ -1,7 +1,9 @@
 小猪替你顶一会儿 · Mac 轻量候选版 0.2.0
 
 此版本使用 macOS 自带的 WebKit，不携带 Electron 浏览器运行时。
-支持 macOS 13 及以上。M 系列芯片选择 arm64；Intel 芯片选择 x86_64。
+支持 macOS 13 及以上。Universal 通用包同时包含苹果芯片和 Intel 两种架构。
+单架构包中，M 系列芯片选择 arm64；Intel 芯片选择 x86_64。
+请查看 SECURITY-REPORT.json 中 runtime_tested_architectures；架构已包含，不等同于已在该芯片上实测启动。
 
 安装：
 1. 先从菜单栏退出原来的 PainPig，避免同时运行两个版本。
