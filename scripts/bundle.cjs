@@ -4,7 +4,7 @@ const destination='build/delivery';fs.mkdirSync(destination,{recursive:true});
 const artifacts=[];
 function visit(directory){for(const item of fs.readdirSync(directory,{withFileTypes:true})){
  const file=path.join(directory,item.name);if(item.isDirectory())visit(file);
- else if(/\.(exe|dmg|zip)$/.test(item.name))artifacts.push(file);
+ else if((process.platform==='win32'?/\.exe$/:/\.dmg$/).test(item.name))artifacts.push(file);
 }}
 visit('out/make');
 if(!artifacts.length)throw new Error('No installer artifacts were produced');
