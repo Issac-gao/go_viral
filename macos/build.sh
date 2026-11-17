@@ -9,7 +9,7 @@ npx --yes --package typescript@5.9.3 tsc -p tsconfig.ui.json
 npx --yes --package typescript@5.9.3 tsc -p macos/tsconfig.json
 cp src/ui/*.html src/ui/*.css "$app/Contents/Resources/ui/"
 cp build/ui-ts/ui/*.js "$app/Contents/Resources/ui/"
-node -e 'const fs=require("fs");const s=fs.readFileSync("build/native-ts/macos/bridge.js","utf8").split("export {};").join("");fs.writeFileSync("build/mac-native/PainPig.app/Contents/Resources/bridge.js",s)'
+node macos/prepare-ui.cjs
 node scripts/icons.cjs
 cp build/icon.icns "$app/Contents/Resources/icon.icns"
 cp dist/assets/tray.png "$app/Contents/Resources/tray.png"

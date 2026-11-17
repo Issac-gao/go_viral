@@ -1,5 +1,12 @@
-import hashlib, json, os, pathlib, shutil, subprocess, sys, tempfile, urllib.request, zipfile
+import hashlib, json, os, pathlib, shutil, subprocess, sys, tempfile, urllib.request, urllib.parse, zipfile
 
+class SafeRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        redirected = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if redirected is not None and urllib.parse.urlparse(req.full_url).hostname != urllib.parse.urlparse(newurl).hostname:
+            redirected.remove_header("Authorization")
+        return redirected
+opener = urllib.request.build_opener(SafeRedirect())
 root = pathlib.Path(__file__).resolve().parents[1]
 delivery = root / "build/mac-delivery"
 delivery.mkdir(parents=True, exist_ok=True)
@@ -48,7 +55,7 @@ with tempfile.TemporaryDirectory(prefix="painpig-audit-") as tmp:
             request=urllib.request.Request("https://api.github.com/repos/Issac-gao/go_viral/actions/artifacts/"+old_id+"/zip",
                 headers={"Authorization":"Bearer "+token,"Accept":"application/vnd.github+json"})
             old_zip=tmp/"original.zip"
-            with urllib.request.urlopen(request,timeout=90) as response,old_zip.open("wb") as target:
+            with opener.open(request,timeout=90) as response,old_zip.open("wb") as target:
                 shutil.copyfileobj(response,target)
             old_files=tmp/"original";old_files.mkdir()
             with zipfile.ZipFile(old_zip) as z:
@@ -70,7 +77,7 @@ with tempfile.TemporaryDirectory(prefix="painpig-audit-") as tmp:
                 finally:run(["hdiutil","detach",old_mount])
             else:report["original_mount"]=old_attach
         except Exception as error:
-            report["original_audit_error"]=str(error).replace(token,"[REDACTED]")
+            report["original_audit_error"]=type(error).__name__ + " (original artifact audit unavailable)"
 report_file=delivery/"SECURITY-REPORT.json"
 report_file.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
 shutil.copy2(dmg,delivery/dmg.name)

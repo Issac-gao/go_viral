@@ -308,7 +308,7 @@ final class Delegate:NSObject,NSApplicationDelegate,WKScriptMessageHandler,WKNav
                     guard paused && !pet.isVisible else{throw PigError("隐藏检查失败")}
                     showPig();guard !paused else{throw PigError("恢复检查失败")}
                     print("PAINPIG_NATIVE_SMOKE_OK");fflush(stdout);exit(0)
-                }else{throw PigError("Smoke failed: \(args)")}
+                }else{fputs("NATIVE_SMOKE_FAILED: \(args)\n",stderr);exit(1)}
             default:throw PigError("未知的调用")
             }
             reply(view,id,true,answer)
