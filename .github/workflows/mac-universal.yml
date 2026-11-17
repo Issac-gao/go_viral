@@ -1,0 +1,30 @@
+name: Mac lightweight universal
+on:
+  push:
+    branches: [feat/pain-pig-mac-universal]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  universal:
+    runs-on: macos-15-intel
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Build Universal Mac app and test on Intel
+        run: bash macos/build-universal.sh
+      - name: Verify DMG, signatures, Gatekeeper and actual size
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_ARCH: universal
+        run: python3 macos/verify.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PainPig-Mac-Lite-Universal
+          path: build/mac-delivery/
+          retention-days: 30
+          if-no-files-found: error

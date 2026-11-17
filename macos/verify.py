@@ -10,7 +10,8 @@ opener = urllib.request.build_opener(SafeRedirect())
 root = pathlib.Path(__file__).resolve().parents[1]
 delivery = root / "build/mac-delivery"
 delivery.mkdir(parents=True, exist_ok=True)
-arch = subprocess.check_output(["uname", "-m"], text=True).strip()
+host_arch = subprocess.check_output(["uname", "-m"], text=True).strip()
+arch = os.environ.get("TARGET_ARCH",host_arch)
 dmg = root / "build/mac-native" / ("PainPig-Lite-" + arch + ".dmg")
 def run(args):
     try:
@@ -27,7 +28,10 @@ report = {
     "dmg_bytes":dmg.stat().st_size,
     "size_target_bytes":20_000_000, "developer_id_signed":False, "notarized":False,
     "dmg_integrity":run(["hdiutil","verify",dmg]),
-    "native_smoke":"passed during build",
+    "native_smoke":"passed during build on "+host_arch,
+    "runtime_tested_architectures":[host_arch],
+    "built_architectures":["x86_64","arm64"] if arch=="universal" else [arch],
+    "apple_silicon_native_launch":"NOT VERIFIED" if host_arch!="arm64" else "passed",
     "manual_download_and_finder_open":"NOT VERIFIED",
     "real_device_interaction":"NOT VERIFIED"
 }
