@@ -172,6 +172,10 @@ async function runSmoke():Promise<void> {
   // Real Chromium renderer and sandboxed preload must load on each target platform.
   const result=await pet.webContents.executeJavaScript(`(async()=>{const s=await window.pig.getState();return {form:s.settings.form,svg:!!document.querySelector('svg'),buttons:document.querySelectorAll('button').length};})()`);
   if(result.form!=='worker'||!result.svg||result.buttons<2) throw new Error('pet renderer smoke check failed: '+JSON.stringify(result));
+  const hit=await pet.webContents.executeJavaScript(`({pig:!!document.elementFromPoint(138,219)?.closest('[data-hit]'),blank:!!document.elementFromPoint(2,100)?.closest('[data-hit]')})`);
+  if(!hit.pig||hit.blank)throw new Error('Painted hit region check failed: '+JSON.stringify(hit));
+  await pet.webContents.executeJavaScript(`window.pig.setForm('puffer')`);
+  if(settings.form!=='puffer')throw new Error('form persistence bridge failed');
   perform('vent');
   const vent=await pet.webContents.executeJavaScript(`new Promise(resolve=>setTimeout(()=>resolve(document.body.dataset.action),150))`);
   if(vent!=='vent')throw new Error('renderer did not receive action');
