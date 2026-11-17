@@ -1,0 +1,48 @@
+name: Mac lightweight candidate
+on:
+  push:
+    branches: [feat/pain-pig-mac-lite]
+    paths:
+      - 'macos/**'
+      - 'src/ui/**'
+      - 'src/types.ts'
+      - 'scripts/icons.cjs'
+      - '.github/workflows/mac-lite.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: mac-lite-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-26
+            arch: arm64
+          - os: macos-15-intel
+            arch: x86_64
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check architecture
+        run: test "$(uname -m)" = "${{ matrix.arch }}"
+      - name: Compile native WebKit app, behavior tests and desktop smoke
+        run: bash macos/build.sh
+      - name: Verify DMG, extracted signature and downloaded-app assessment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 macos/verify.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PainPig-Mac-Lite-${{ matrix.arch }}
+          path: build/mac-delivery/
+          if-no-files-found: error
+          retention-days: 30

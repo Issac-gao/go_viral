@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.ui.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "outDir": "../build/native-ts"
+  },
+  "include": [
+    "bridge.ts"
+  ]
+}
